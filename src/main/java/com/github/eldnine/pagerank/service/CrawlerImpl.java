@@ -9,6 +9,8 @@ import com.github.eldnine.pagerank.dao.LinkRepo;
 import com.github.eldnine.pagerank.dao.PageRepo;
 import com.github.eldnine.pagerank.dao.WebRepo;
 import com.github.eldnine.pagerank.dto.Page;
+import com.github.eldnine.pagerank.dto.Web;
+import com.github.eldnine.pagerank.util.HtmlFetcher;
 
 public class CrawlerImpl implements Crawler {
 	
@@ -18,6 +20,8 @@ public class CrawlerImpl implements Crawler {
 	LinkRepo linkRepo;
 	@Autowired
 	PageRepo pageRepo;
+	
+	HtmlFetcher htmlFetcher;
 	
 	@Override
 	public void initCrawlerList() {
@@ -29,6 +33,10 @@ public class CrawlerImpl implements Crawler {
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Enter a url: ");
 			String startUrl = sc.nextLine();
+			if (htmlFetcher.isUrlFine(startUrl)) {
+				webRepo.save(new Web(startUrl));
+				pageRepo.saveAndFlush();
+			}
 		}
 	}
 

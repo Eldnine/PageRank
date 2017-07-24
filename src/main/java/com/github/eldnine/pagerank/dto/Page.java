@@ -4,10 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @Entity
+@AllArgsConstructor
 public class Page {
 	@Id
 	private int id;
