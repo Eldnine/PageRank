@@ -2,8 +2,6 @@ package com.github.eldnine.pagerank.dto;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -18,4 +16,7 @@ public class Page {
 	private int error;
 	private double oldRank;
 	private double newRank;
+	
+	public Page(String url, String html, double newRank) {	
+	}
 }

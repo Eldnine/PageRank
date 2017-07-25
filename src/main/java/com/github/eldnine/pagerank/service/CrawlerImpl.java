@@ -1,6 +1,5 @@
 package com.github.eldnine.pagerank.service;
 
-import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,9 @@ import com.github.eldnine.pagerank.dao.WebRepo;
 import com.github.eldnine.pagerank.dto.Page;
 import com.github.eldnine.pagerank.dto.Web;
 import com.github.eldnine.pagerank.util.HtmlFetcher;
+import com.github.eldnine.pagerank.util.HtmlParser;
 
-public class CrawlerImpl implements Crawler {
+public class CrawlerImpl {
 	
 	@Autowired
 	WebRepo webRepo;
@@ -22,28 +22,31 @@ public class CrawlerImpl implements Crawler {
 	PageRepo pageRepo;
 	
 	HtmlFetcher htmlFetcher;
+	HtmlParser htmlParser;
+	int numPages;
 	
-	@Override
 	public void initCrawlerList() {
 		Page page = pageRepo.findTopByUrlAndHtml(null, null);
 		if (page != null) {
-			System.out.println("Restarting existing crawl.  "
-					+ "Remove spider.sqlite to start a fresh crawl.");
+			System.out.println("Restarting existing crawl.");
 		} else {
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Enter a url: ");
 			String startUrl = sc.nextLine();
 			if (htmlFetcher.isUrlFine(startUrl)) {
-				webRepo.save(new Web(startUrl));
-				pageRepo.saveAndFlush();
+				webRepo.saveAndFlush(new Web(startUrl));
+				pageRepo.saveAndFlush(new Page(startUrl, null, 1.0));
 			}
+			
+			System.out.println("How many pages do you want to crawl?");
+			numPages = sc.nextInt();
+			sc.close();
 		}
 	}
-
-	@Override
-	public void doRun() {
-		// TODO Auto-generated method stub
+	
+	public static void main(String[] args) {
+		CrawlerImpl c = new CrawlerImpl();
+		c.initCrawlerList();
 		
 	}
-
 }
