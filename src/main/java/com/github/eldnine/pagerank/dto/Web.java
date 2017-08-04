@@ -14,7 +14,7 @@ import lombok.Data;
 public class Web {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private long id;
 	
 	private String url;
 }

@@ -11,7 +11,7 @@ import lombok.Data;
 public class Page {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	private long id;
 	private String url;
 	private String html;
 	private int error;

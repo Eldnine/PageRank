@@ -17,7 +17,6 @@ public class MainController {
 
 	@GetMapping(path="/all")
 	public @ResponseBody Iterable<Page> getAllPages() {
-		// This returns a JSON or XML with the users
 		return pageRepo.findAll();
 	}
 }

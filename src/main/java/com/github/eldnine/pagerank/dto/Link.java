@@ -14,8 +14,8 @@ import lombok.Data;
 public class Link {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private long id;
 	
-	private int fromId;
-	private int toId;
+	private long fromId;
+	private long toId;
 }
