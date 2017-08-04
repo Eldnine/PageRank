@@ -2,14 +2,10 @@ package com.github.eldnine.pagerank.service;
 
 import java.util.Scanner;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.github.eldnine.pagerank.dao.LinkRepo;
 import com.github.eldnine.pagerank.dao.PageRepo;
 import com.github.eldnine.pagerank.dao.WebRepo;
 import com.github.eldnine.pagerank.dto.Page;
-import com.github.eldnine.pagerank.dto.Web;
 import com.github.eldnine.pagerank.util.HtmlFetcher;
 import com.github.eldnine.pagerank.util.HtmlParser;
 
