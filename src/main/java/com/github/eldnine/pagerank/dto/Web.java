@@ -17,4 +17,8 @@ public class Web {
     private long id;
 	
 	private String url;
+	
+	public Web(String url) {
+		this.url = url;
+	}
 }

@@ -2,7 +2,6 @@ package com.github.eldnine.pagerank.service;
 
 import java.util.Scanner;
 
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +9,7 @@ import com.github.eldnine.pagerank.dao.LinkRepo;
 import com.github.eldnine.pagerank.dao.PageRepo;
 import com.github.eldnine.pagerank.dao.WebRepo;
 import com.github.eldnine.pagerank.dto.Page;
+import com.github.eldnine.pagerank.dto.Web;
 import com.github.eldnine.pagerank.util.HtmlFetcher;
 import com.github.eldnine.pagerank.util.HtmlParser;
 
@@ -21,8 +21,9 @@ public class CrawlerImpl {
 	LinkRepo linkRepo;
 	@Autowired
 	PageRepo pageRepo;
-	
+	@Autowired
 	HtmlFetcher htmlFetcher;
+	@Autowired
 	HtmlParser htmlParser;
 	int numPages;
 	
@@ -35,7 +36,7 @@ public class CrawlerImpl {
 			System.out.println("Enter a url: ");
 			String startUrl = sc.nextLine();
 			if (htmlFetcher.isUrlFine(startUrl)) {
-				//webRepo.saveAndFlush(new Web(startUrl));
+				webRepo.saveAndFlush(new Web(startUrl));
 				//pageRepo.saveAndFlush(new Page(startUrl, null, 1.0));
 			}
 			
