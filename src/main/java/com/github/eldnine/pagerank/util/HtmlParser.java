@@ -5,9 +5,13 @@ import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class HtmlParser {
-	private static final HtmlFetcher htmlFetcher = new HtmlFetcher();
+	@Autowired
+	private HtmlFetcher htmlFetcher;
 	
 	public List<String> getAllHrefs(String url) {
 		Document document = Jsoup.parse(htmlFetcher.fetch(url));
