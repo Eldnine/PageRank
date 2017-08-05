@@ -5,7 +5,7 @@ A realization for the pagerank session of Google `http://infolab.stanford.edu/~b
 * mysql server 5.5+
 * java 8
 ### Installing:
-#### mysql setup:
+#### mysql setup
 ```
 mysql> create database pagerank;
 mysql> create user 'pagerank'@'localhost' identified by 'pagerank';
