@@ -1,4 +1,5 @@
 # pagerank
+A realization for the pagerank session of Google `http://infolab.stanford.edu/~backrub/google.html`
 ## mysql init:
 ```
 mysql> create database pagerank;
