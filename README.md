@@ -4,7 +4,7 @@ A realization for the pagerank session of Google `http://infolab.stanford.edu/~b
 ### Prerequisites
 * mysql server 5.5+
 * java 8
-### Installing:
+### Installing
 #### mysql setup
 ```
 mysql> create database pagerank;
