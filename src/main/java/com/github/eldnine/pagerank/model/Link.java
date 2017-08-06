@@ -8,7 +8,6 @@ import javax.persistence.Id;
 @Entity
 public class Link {
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 	private long fromId;
 	private long toId;

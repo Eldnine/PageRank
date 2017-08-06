@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import com.github.eldnine.pagerank.model.Page;
 import com.github.eldnine.pagerank.model.Web;
 import com.github.eldnine.pagerank.repo.LinkRepo;
@@ -14,7 +13,7 @@ import com.github.eldnine.pagerank.repo.WebRepo;
 import com.github.eldnine.pagerank.util.HtmlFetcher;
 import com.github.eldnine.pagerank.util.HtmlParser;
 
-@Service
+@Component
 public class CrawlerImpl {
 	@Autowired
 	WebRepo webRepo;

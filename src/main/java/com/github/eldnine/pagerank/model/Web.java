@@ -8,7 +8,6 @@ import javax.persistence.Id;
 @Entity
 public class Web {
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 	private String url;
 	
