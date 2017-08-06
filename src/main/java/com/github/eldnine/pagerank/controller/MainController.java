@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.eldnine.pagerank.dao.PageRepo;
-import com.github.eldnine.pagerank.dto.Page;
+import com.github.eldnine.pagerank.model.Page;
+import com.github.eldnine.pagerank.repo.PageRepo;
 
 @Controller
 @RequestMapping(path="/demo")
