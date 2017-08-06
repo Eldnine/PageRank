@@ -1,8 +1,6 @@
 package com.github.eldnine.pagerank.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -17,6 +15,11 @@ public class Link {
 		this.id = id;
 		this.fromId = fromId;
 		this.toId = toId;
+	}
+	
+	public Link(long fromId, long toId) {
+		this.setFromId(fromId);
+		this.setToId(toId);
 	}
 	
 	public long getFromId() {

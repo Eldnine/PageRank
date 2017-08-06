@@ -20,7 +20,7 @@ public class MainController {
 	
 	@GetMapping(path="/all")
 	public @ResponseBody Iterable<Page> getAllPages() {
-		crawler.initCrawlerList();
+		crawler.run();
 		return pageRepo.findAll();
 	}
 }

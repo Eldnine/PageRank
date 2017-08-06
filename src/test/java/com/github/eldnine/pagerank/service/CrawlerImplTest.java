@@ -18,6 +18,6 @@ public class CrawlerImplTest {
 	
 	@Test
 	public void test() {
-		crawler.initCrawlerList();
+		crawler.run();
 	}
 }

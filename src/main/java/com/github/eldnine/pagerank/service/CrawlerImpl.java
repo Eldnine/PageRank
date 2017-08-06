@@ -1,67 +1,85 @@
 package com.github.eldnine.pagerank.service;
 
-import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.github.eldnine.pagerank.model.Link;
 import com.github.eldnine.pagerank.model.Page;
-import com.github.eldnine.pagerank.model.Web;
 import com.github.eldnine.pagerank.repo.LinkRepo;
 import com.github.eldnine.pagerank.repo.PageRepo;
-import com.github.eldnine.pagerank.repo.WebRepo;
 import com.github.eldnine.pagerank.util.HtmlFetcher;
 import com.github.eldnine.pagerank.util.HtmlParser;
 
 @Component
 public class CrawlerImpl {
 	@Autowired
-	WebRepo webRepo;
-	@Autowired
 	LinkRepo linkRepo;
 	@Autowired
 	PageRepo pageRepo;
-	@Autowired
-	HtmlFetcher htmlFetcher;
-	@Autowired
-	HtmlParser htmlParser;
+	
 	int numPages;
-	
-	public synchronized Web saveWeb(Web web) {
-		return webRepo.saveAndFlush(web);
-	}
-	
-	public synchronized Page savePage(Page page) {
-		return pageRepo.saveAndFlush(page);
-	}
-	
-	 public synchronized List<Web> getAllWeb() {
-		 
-		 return webRepo.findAll();
-	 }
-	
-	public void initCrawlerList() {
-		Page page = pageRepo.findTopByUrlAndHtml(null, null);
-		if (page != null) {
-			System.out.println("Restarting existing crawl.");
-			return;
-		}
 
+	public void run() {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter a url: ");
-		String startUrl = sc.nextLine();
-		if (!htmlFetcher.isUrlFine(startUrl)) {
-			System.out.println("Invalid url.");
+		// initialize entry page and numbers of pages
+		if (pageRepo.findTopByIsCrawledAndError(false, null)  != null) {
+			System.out.println("Restarting existing crawl.");
 			sc.close();
 			return;
+		} else {
+			System.out.println("Enter a url: ");
+			String startUrl = sc.nextLine();
+			if (!HtmlFetcher.isUrlFine(startUrl)) {
+				System.out.println("Invalid url.");
+				sc.close();
+				return;
+			}
+			pageRepo.saveAndFlush(new Page(startUrl, false, 1.0));
+			System.out.println("Starting from " + startUrl);
 		}
-		System.out.println("Saving " + startUrl);
-		saveWeb(new Web(startUrl));
-		savePage(new Page(startUrl, null, 1.0));
-		webRepo.findTopByUrl(startUrl);
-		//getAllWeb();
 		System.out.println("How many pages do you want to crawl?");
 		numPages = sc.nextInt();
 		sc.close();
+		
+		// loop number of pages; add href inside those pages into pages table; update links
+		for (int i = 0; i < numPages; i ++) {
+			Page page = pageRepo.findTopByIsCrawledAndError(false, null);
+			if (page == null) {
+				System.out.println("No more url.");
+				break;
+			}
+			long fromId = page.getId();
+			String url = page.getUrl();
+			System.out.println(fromId + " " + url);
+
+			linkRepo.removeByFromId(fromId);
+			if (!HtmlFetcher.isUrlFine(url)) {
+				System.out.println("Invalid url: " + url);
+				sc.close();
+				continue;
+			}
+			page.setIsCrawled(true);
+			pageRepo.saveAndFlush(page);
+			for (String href : HtmlParser.getAllHrefs(url)) {
+				if (href == null || href.endsWith(".png") || href.endsWith(".jpg") || href.endsWith(".gif")) {
+					continue;
+				}
+				if (href.endsWith("/")) {
+					href = href.substring(0, href.length() - 1);
+				}
+				if (href.length() < 1) {
+					continue;
+				}
+				if (pageRepo.findTopByUrl(href) != null) {
+					continue;
+				}
+				System.out.println("Herf: " + href);
+				pageRepo.saveAndFlush(new Page(href, false, 1.0));
+				long toId = pageRepo.findTopByUrl(href).getId();
+				linkRepo.saveAndFlush(new Link(fromId, toId));
+			}
+		}
 	}
 }

@@ -8,19 +8,13 @@ import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
 public class HtmlParser {
-	@Autowired
-	private HtmlFetcher htmlFetcher;
+	private HtmlFetcher htmlFetcher = new HtmlFetcher();
 	
-	public List<String> getAllHrefs(String url) {
-		Document document = Jsoup.parse(htmlFetcher.fetch(url));
+	public static List<String> getAllHrefs(String url) {
+		Document document = Jsoup.parse(HtmlFetcher.fetch(url));
 		return document.select("a").stream().map(e -> e.absUrl("href")).collect(Collectors.toList());
 	}
 	
-    public static <T> void main(String[] args) throws Exception {
-        HtmlParser htmlParser = new HtmlParser();
-        htmlParser.getAllHrefs("http://sg.weibo.com")
-        .forEach(playlist -> System.out.println(playlist));
-    }
+
 }
