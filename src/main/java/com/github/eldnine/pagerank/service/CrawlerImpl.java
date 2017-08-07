@@ -37,7 +37,7 @@ public class CrawlerImpl {
 			System.out.println("Starting from " + startUrl);
 		}
 		System.out.println("Number of pages: " + numPages);
-		// loop number of pages; add href inside those pages into pages table; update links
+		// loop number of pages; add href inside those pages into pages; update links
 		for (int i = 0; i < numPages; i ++) {
 			Page page = pageRepo.findTopByIsCrawledAndError(false, null);
 			if (page == null) {
@@ -46,8 +46,6 @@ public class CrawlerImpl {
 			}
 			long fromId = page.getId();
 			String url = page.getUrl();
-			System.out.println("From page: " + url);
-
 			linkRepo.removeByFromId(fromId);
 			if (!HtmlFetcher.isUrlFine(url)) {
 				System.out.println("Invalid url: " + url);
@@ -57,6 +55,7 @@ public class CrawlerImpl {
 			}
 			page.setIsCrawled(true);
 			pageRepo.saveAndFlush(page);
+			System.out.println("From page: " + url);
 			for (String href : HtmlParser.getAllHrefs(url)) {
 				if (href == null || href.endsWith(".png") || href.endsWith(".jpg") || href.endsWith(".gif")) {
 					continue;
