@@ -1,7 +1,5 @@
 package com.github.eldnine.pagerank.service;
 
-import java.util.Scanner;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +20,9 @@ public class CrawlerImpl {
 	String startUrl = "http://sg.weibo.com";
 	int numPages = 20;
 
-	public void run() {
+	public void run(String startUrl, int numPages) {
+		this.startUrl = startUrl;
+		this.numPages = numPages;
 		// initialize entry page and numbers of pages
 		if (pageRepo.findTopByIsCrawledAndError(false, null)  != null) {
 			System.out.println("Restarting existing crawl.");

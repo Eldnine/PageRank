@@ -32,6 +32,10 @@ public class Page {
 		this.setNewRank(newRank);
 	}
 	
+	public Page() {
+		
+	}
+	
 	public long getId() {
 		return id;
 	}
