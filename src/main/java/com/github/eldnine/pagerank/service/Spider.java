@@ -1,7 +1,7 @@
 package com.github.eldnine.pagerank.service;
 
 @Deprecated
-public interface Crawler {
+public interface Spider {
     void initCrawlerList();
     
     void doRun();

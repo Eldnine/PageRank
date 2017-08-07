@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.eldnine.pagerank.model.Page;
 import com.github.eldnine.pagerank.repo.PageRepo;
-import com.github.eldnine.pagerank.service.CrawlerImpl;
+import com.github.eldnine.pagerank.service.SpiderImpl;
 
 @Controller
 @RequestMapping(path="/spider")
@@ -16,11 +16,11 @@ public class MainController {
 	@Autowired
 	private PageRepo pageRepo;
 	@Autowired
-	CrawlerImpl crawler;
+	SpiderImpl spider;
 	
 	@GetMapping(path="/crawl")
 	public @ResponseBody Iterable<Page> getAllPages() {
-		crawler.run("http://sg.weibo.com", 10);
+		spider.run();
 		return pageRepo.findAll();
 	}
 }

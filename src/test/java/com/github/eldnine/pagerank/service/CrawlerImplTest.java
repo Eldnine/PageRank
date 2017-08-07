@@ -11,10 +11,10 @@ import com.github.eldnine.pagerank.Application;
 @SpringBootTest(classes = Application.class)
 public class CrawlerImplTest {
 	@Autowired
-	CrawlerImpl crawler;
+	SpiderImpl spider;
 	
 	@Test
 	public void test() {
-		crawler.run("http://sg.weibo.com", 10);
+		spider.run();
 	}
 }
