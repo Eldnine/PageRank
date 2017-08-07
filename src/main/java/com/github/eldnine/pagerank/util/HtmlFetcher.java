@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.springframework.stereotype.Component;
 
 public class HtmlFetcher {
 
