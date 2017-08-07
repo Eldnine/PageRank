@@ -11,16 +11,16 @@ import com.github.eldnine.pagerank.repo.PageRepo;
 import com.github.eldnine.pagerank.service.CrawlerImpl;
 
 @Controller
-@RequestMapping(path="/demo")
+@RequestMapping(path="/spider")
 public class MainController {
 	@Autowired
 	private PageRepo pageRepo;
 	@Autowired
 	CrawlerImpl crawler;
 	
-	@GetMapping(path="/all")
+	@GetMapping(path="/crawl")
 	public @ResponseBody Iterable<Page> getAllPages() {
-		crawler.run();
+		crawler.run("http://sg.weibo.com", 10);
 		return pageRepo.findAll();
 	}
 }
