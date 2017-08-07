@@ -19,30 +19,24 @@ public class CrawlerImpl {
 	@Autowired
 	PageRepo pageRepo;
 	
-	int numPages;
+	String startUrl = "http://sg.weibo.com";
+	int numPages = 20;
 
 	public void run() {
-		Scanner sc = new Scanner(System.in);
 		// initialize entry page and numbers of pages
 		if (pageRepo.findTopByIsCrawledAndError(false, null)  != null) {
 			System.out.println("Restarting existing crawl.");
-			sc.close();
 			return;
 		} else {
-			System.out.println("Enter a url: ");
-			String startUrl = sc.nextLine();
+			System.out.println("Starting url: " + startUrl);
 			if (!HtmlFetcher.isUrlFine(startUrl)) {
 				System.out.println("Invalid url.");
-				sc.close();
 				return;
 			}
 			pageRepo.saveAndFlush(new Page(startUrl, false, 1.0));
 			System.out.println("Starting from " + startUrl);
 		}
-		System.out.println("How many pages do you want to crawl?");
-		numPages = sc.nextInt();
-		sc.close();
-		
+		System.out.println("Number of pages: " + numPages);
 		// loop number of pages; add href inside those pages into pages table; update links
 		for (int i = 0; i < numPages; i ++) {
 			Page page = pageRepo.findTopByIsCrawledAndError(false, null);
@@ -52,12 +46,13 @@ public class CrawlerImpl {
 			}
 			long fromId = page.getId();
 			String url = page.getUrl();
-			System.out.println(fromId + " " + url);
+			System.out.println("From page: " + url);
 
 			linkRepo.removeByFromId(fromId);
 			if (!HtmlFetcher.isUrlFine(url)) {
 				System.out.println("Invalid url: " + url);
-				sc.close();
+				page.setIsCrawled(true);
+				pageRepo.saveAndFlush(page);
 				continue;
 			}
 			page.setIsCrawled(true);
@@ -75,7 +70,7 @@ public class CrawlerImpl {
 				if (pageRepo.findTopByUrl(href) != null) {
 					continue;
 				}
-				System.out.println("Herf: " + href);
+				System.out.println("To page: " + href);
 				pageRepo.saveAndFlush(new Page(href, false, 1.0));
 				long toId = pageRepo.findTopByUrl(href).getId();
 				linkRepo.saveAndFlush(new Link(fromId, toId));

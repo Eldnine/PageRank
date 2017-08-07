@@ -22,7 +22,7 @@ public class HtmlFetcher {
 			Connection.Response response = Jsoup.connect(url).timeout(3000).execute();
 			return response.statusCode() / 100 == 2;
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			return false;
 		}
     }
