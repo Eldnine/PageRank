@@ -13,8 +13,8 @@ import com.github.eldnine.pagerank.repo.LinkRepo;
 import com.github.eldnine.pagerank.repo.PageRepo;
 
 @Component
-public class SpiderImpl {
-	public static final Integer MAX_NUM_THREADS = 10;
+public class SpiderService {
+	public static final Integer MAX_NUM_THREADS = 3;
 	public final String START_URL = "http://sg.weibo.com";
 	
 	@Autowired
@@ -35,7 +35,7 @@ public class SpiderImpl {
 		return pageRepo.saveAndFlush(page);
 	}
 	
-	public boolean isUrlExist(String url) {
+	public synchronized boolean isUrlExist(String url) {
 		return pageRepo.findTopByUrl(url) != null;
 	}
 	
@@ -47,14 +47,14 @@ public class SpiderImpl {
 		return linkRepo.saveAndFlush(link);
 	}
 	
-	public long getPageIdByUrl(String url) {
+	public synchronized long getPageIdByUrl(String url) {
 		return pageRepo.findTopByUrl(url).getId();
 	}
 
 	public void run() {
 		initStartUrl();
         ExecutorService executorService = Executors.newFixedThreadPool(MAX_NUM_THREADS);
-        for(int i = 0; i < MAX_NUM_THREADS; i++) {
+        for (int i = 0; i < MAX_NUM_THREADS; i++) {
             executorService.execute(new SpiderThread(this));
         }
         executorService.shutdown();

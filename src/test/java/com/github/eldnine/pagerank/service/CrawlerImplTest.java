@@ -11,7 +11,7 @@ import com.github.eldnine.pagerank.Application;
 @SpringBootTest(classes = Application.class)
 public class CrawlerImplTest {
 	@Autowired
-	SpiderImpl spider;
+	SpiderService spider;
 	
 	@Test
 	public void test() {

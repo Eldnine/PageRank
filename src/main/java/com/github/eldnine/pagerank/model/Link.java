@@ -25,6 +25,10 @@ public class Link {
 		this.setToId(toId);
 	}
 	
+	public Link() {
+		super();
+	}
+	
 	public long getFromId() {
 		return fromId;
 	}
