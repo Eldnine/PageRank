@@ -14,7 +14,7 @@ import com.github.eldnine.pagerank.repo.PageRepo;
 
 @Component
 public class SpiderService {
-	public static final Integer MAX_NUM_THREADS = 20;
+	public static final Integer MAX_NUM_THREADS = 5;
 	public final String START_URL = "http://sg.weibo.com";
 	
 	@Autowired
@@ -23,6 +23,8 @@ public class SpiderService {
 	PageRepo pageRepo;
 
     public void initStartUrl() {
+    	linkRepo.deleteAll();
+    	pageRepo.deleteAll();
     	pageRepo.saveAndFlush(new Page(START_URL, false, 1.0));
     }
 
@@ -35,19 +37,19 @@ public class SpiderService {
 		return pageRepo.saveAndFlush(page);
 	}
 	
-	public synchronized boolean isUrlExist(String url) {
+	public boolean isUrlExist(String url) {
 		return pageRepo.findTopByUrl(url) != null;
 	}
 	
-	public Page savePage(Page page) {
+	public synchronized Page savePage(Page page) {
 		return pageRepo.saveAndFlush(page);
 	}
 	
-	public Link saveLink(Link link) {
+	public synchronized Link saveLink(Link link) {
 		return linkRepo.saveAndFlush(link);
 	}
 	
-	public synchronized long getPageIdByUrl(String url) {
+	public long getPageIdByUrl(String url) {
 		return pageRepo.findTopByUrl(url).getId();
 	}
 

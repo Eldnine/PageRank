@@ -21,6 +21,7 @@ public class SpiderThread implements Runnable{
 		super();
 		this.spider = spider;
 	}
+	
 	@Override
 	public void run() {
 		Page page;
