@@ -1,5 +1,6 @@
 package com.github.eldnine.pagerank.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -49,7 +50,15 @@ public class SpiderThread implements Runnable{
 				}
 				Thread.sleep(100);
 				logger.info("Parsing: " + page.getUrl());
-				List<String> hrefs = HtmlParser.getAllHrefs(page.getUrl());
+				List<String> hrefs;
+				try {
+					hrefs = HtmlParser.getAllHrefs(page.getUrl());
+				} catch (IOException e) {
+					e.printStackTrace();
+					page.setError(1);
+					spider.savePage(page);
+					continue;
+				}
 				if (hrefs == null) {
 					continue;
 				}

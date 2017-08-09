@@ -14,7 +14,7 @@ import com.github.eldnine.pagerank.repo.PageRepo;
 
 @Component
 public class SpiderService {
-	public static final Integer MAX_NUM_THREADS = 3;
+	public static final Integer MAX_NUM_THREADS = 20;
 	public final String START_URL = "http://sg.weibo.com";
 	
 	@Autowired
