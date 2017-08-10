@@ -12,4 +12,7 @@ public interface LinkRepo extends JpaRepository<Link, String> {
 	
 	@Query("SELECT DISTINCT p.fromId FROM Link p")
 	List<Long> findDistinctFromId();
+	
+	@Query("SELECT DISTINCT p.fromId, p.toId FROM Link p")
+	List<Long[]> findDistinctFromIdAndToId();
 }

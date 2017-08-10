@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.eldnine.pagerank.model.Link;
 import com.github.eldnine.pagerank.repo.LinkRepo;
+import com.github.eldnine.pagerank.service.RankCalcService;
 import com.github.eldnine.pagerank.service.RankResetService;
 import com.github.eldnine.pagerank.service.SpiderService;
 
@@ -20,6 +21,8 @@ public class MainController {
 	SpiderService spider;
 	@Autowired
 	RankResetService rankReset;
+	@Autowired
+	RankCalcService rankCalcService;
 	
 	@GetMapping(path="/crawl")
 	public @ResponseBody Iterable<Link> getAllPages() {
@@ -30,6 +33,12 @@ public class MainController {
 	@GetMapping(path="/reset")
 	public @ResponseBody String resetRank() {
 		rankReset.reset();
-		return "reset successful!";
+		return "Reset successful!";
+	}
+	
+	@GetMapping(path="/rank")
+	public @ResponseBody String rank() {
+		rankCalcService.run();
+		return "Rank successful!";
 	}
 }
