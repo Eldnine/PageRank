@@ -3,8 +3,12 @@ A realization for the pagerank session of Google `http://infolab.stanford.edu/~b
 ## Getting Started
 ### Prerequisites
 * java 8
-#### run (linux)
+### Run 
+#### Linux/MacOS
 ```
-chmod +x mvnw
 ./mvnw spring-boot:run
+```
+#### Windows
+```
+mvnw spring-boot:run
 ```
