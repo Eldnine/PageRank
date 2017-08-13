@@ -13,7 +13,7 @@ import com.github.eldnine.pagerank.service.RankResetService;
 import com.github.eldnine.pagerank.service.SpiderService;
 
 @Controller
-@RequestMapping(path="/spider")
+@RequestMapping(path="/pagerank")
 public class MainController {
 	@Autowired
 	private LinkRepo linkRepo;
@@ -24,7 +24,7 @@ public class MainController {
 	@Autowired
 	RankCalcService rankCalcService;
 	
-	@GetMapping(path="/crawl")
+	@GetMapping(path="/spider")
 	public @ResponseBody Iterable<Link> getAllPages() {
 		spider.run();
 		return linkRepo.findAll();
