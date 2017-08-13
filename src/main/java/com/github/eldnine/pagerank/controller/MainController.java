@@ -24,9 +24,15 @@ public class MainController {
 	@Autowired
 	RankCalcService rankCalcService;
 	
-	@GetMapping(path="/spider")
-	public @ResponseBody Iterable<Link> getAllPages() {
+	@GetMapping(path="/spider/new")
+	public @ResponseBody Iterable<Link> newSpider() {
 		spider.run();
+		return linkRepo.findAll();
+	}
+	
+	@GetMapping(path="/spider/continue")
+	public @ResponseBody Iterable<Link> continueSpider() {
+		spider.spider();
 		return linkRepo.findAll();
 	}
 	
