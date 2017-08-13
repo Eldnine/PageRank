@@ -1,4 +1,4 @@
-# pagerank
+# Pagerank with SpringBoot and VUE.js (developing)
 A realization for the pagerank session of Google `http://infolab.stanford.edu/~backrub/google.html`
 ## Getting Started
 ### Prerequisites
