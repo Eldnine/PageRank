@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.eldnine.pagerank.model.Page;
 import com.github.eldnine.pagerank.repo.LinkRepo;
 import com.github.eldnine.pagerank.repo.PageRepo;
 
@@ -34,8 +35,6 @@ public class RankCalcService {
 		List<Long> toIds = new ArrayList<Long>();
 		List<long[]> links = new ArrayList<long[]>();
 		List<Object[]> rawLinks = linkRepo.findDistinctByFromIdAndToId();
-		logger.info("1111111");
-		logger.info(rawLinks.size() + "");
 		
 		for (Object[] link : rawLinks) {
 			long fromId = (long) link[0];
@@ -50,7 +49,6 @@ public class RankCalcService {
 			}
 		}
 		Collections.sort(toIds);
-		logger.info(toIds.toString());
 		
 		Map<Long, Double> prevRanks = new HashMap<Long, Double>();
 		for (long node : fromIds) {
@@ -65,8 +63,9 @@ public class RankCalcService {
 		}
 		
 		// do the pagerank in memory
+		Map<Long, Double> nextRanks = new HashMap<Long, Double>();
 		for (int i = 0; i < numIter; i++) {
-			Map<Long, Double> nextRanks = new HashMap<Long, Double>();
+			nextRanks = new HashMap<Long, Double>();
 			double total = 0.0;
 			for (Map.Entry<Long, Double> entry : prevRanks.entrySet()) {
 				long node = entry.getKey();
@@ -91,7 +90,44 @@ public class RankCalcService {
 					nextRanks.put(id, nextRanks.get(id) + weight);
 				}
 			}
-			logger.info(nextRanks.toString());
+			
+			double newtot = 0.0;
+			for (Map.Entry<Long, Double> entry : nextRanks.entrySet()) {
+				newtot += entry.getValue();
+			}
+			double evap = (total - newtot) / (double) nextRanks.size();
+			
+			for (Map.Entry<Long, Double> entry : nextRanks.entrySet()) {
+				nextRanks.put(entry.getKey(), nextRanks.get(entry.getKey()) + evap);
+			}
+			
+			double totdiff = 0.0;
+			for (Map.Entry<Long, Double> entry : prevRanks.entrySet()) {
+				long node = entry.getKey();
+				double oldRank = entry.getValue();
+				double newRank = nextRanks.get(node);
+				double diff = Math.abs(oldRank - newRank);
+				totdiff += diff;
+			}
+			
+			double avediff = totdiff / (double) prevRanks.size();
+			logger.info(avediff + "");
+			prevRanks = nextRanks;
+		}
+		//logger.info(nextRanks.toString());
+		
+		List<Page> pages = pageRepo.findAll();
+		for (Page page : pages) {
+			page.setOldRank(page.getNewRank());
+			pageRepo.save(page);
+		}
+		for (Map.Entry<Long, Double> entry : nextRanks.entrySet()) {
+			long id = entry.getKey();
+			double newRank = entry.getValue();
+			Page page = pageRepo.findTopById(id);
+			page.setNewRank(newRank);
+			pageRepo.save(page);
+			//logger.info(page.toString());
 		}
 	}
 }

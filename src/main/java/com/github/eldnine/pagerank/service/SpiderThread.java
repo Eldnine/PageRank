@@ -13,7 +13,7 @@ import com.github.eldnine.pagerank.util.HtmlParser;
 
 public class SpiderThread implements Runnable{
 	private static final Logger logger = LoggerFactory.getLogger(SpiderThread.class);  
-	private final int NUM_PAGE = 3;
+	private final int NUM_PAGE = 10;
 
 	private final SpiderService spider;
 
