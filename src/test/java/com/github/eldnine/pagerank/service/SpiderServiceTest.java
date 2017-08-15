@@ -9,7 +9,7 @@ import com.github.eldnine.pagerank.Application;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-public class CrawlerImplTest {
+public class SpiderServiceTest {
 	@Autowired
 	SpiderService spider;
 	

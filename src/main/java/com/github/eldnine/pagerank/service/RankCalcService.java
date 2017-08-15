@@ -76,12 +76,22 @@ public class RankCalcService {
 				
 				List<Long> giveIds = new ArrayList<Long>();
 				for (long[] link : links) {
-					if (link[0] != node) {
-						// TODO
+					long fromId = link[0];
+					long toId = link[1];
+					if (fromId != node || toIds.contains(toId)) {
+						continue;
 					}
+					giveIds.add(toId);
+				}
+				if (giveIds.size() < 1) {
+					continue;
+				}
+				double weight = oldRank / (double) giveIds.size();
+				for (long id : giveIds) {
+					nextRanks.put(id, nextRanks.get(id) + weight);
 				}
 			}
-			logger.info(total + "");
+			logger.info(nextRanks.toString());
 		}
 	}
 }
