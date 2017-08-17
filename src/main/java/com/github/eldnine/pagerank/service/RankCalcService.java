@@ -1,7 +1,6 @@
 package com.github.eldnine.pagerank.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -111,15 +110,14 @@ public class RankCalcService {
 			}
 			
 			double avediff = totdiff / (double) prevRanks.size();
-			logger.info(avediff + "");
+			logger.info("Diff: " + avediff);
 			prevRanks = nextRanks;
 		}
-		//logger.info(nextRanks.toString());
 		
 		List<Page> pages = pageRepo.findAll();
 		for (Page page : pages) {
 			page.setOldRank(page.getNewRank());
-			pageRepo.save(page);
+			pageRepo.saveAndFlush(page);
 		}
 		for (Map.Entry<Long, Double> entry : nextRanks.entrySet()) {
 			long id = entry.getKey();
@@ -127,7 +125,6 @@ public class RankCalcService {
 			Page page = pageRepo.findTopById(id);
 			page.setNewRank(newRank);
 			pageRepo.save(page);
-			//logger.info(page.toString());
 		}
 	}
 }

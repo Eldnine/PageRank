@@ -10,14 +10,14 @@ import com.github.eldnine.pagerank.repo.PageRepo;
 
 @Component
 public class RankResetService {
-	private static final Logger logger = LoggerFactory.getLogger(RankResetService.class);  
-	
+	private static final Logger logger = LoggerFactory.getLogger(RankResetService.class);
+
 	@Autowired
 	PageRepo pageRepo;
-	
+
 	public void reset() {
 		long count = 0;
-		for (Page page:pageRepo.findAll()) {
+		for (Page page : pageRepo.findAll()) {
 			page.setNewRank(1.0);
 			page.setOldRank(0.0);
 			pageRepo.save(page);
