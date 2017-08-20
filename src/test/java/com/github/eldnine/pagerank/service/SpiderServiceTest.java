@@ -15,6 +15,6 @@ public class SpiderServiceTest {
 	
 	@Test
 	public void test() {
-		spider.run();
+		spider.run("http://sg.weibo.com", 1);
 	}
 }

@@ -12,7 +12,7 @@ import com.github.eldnine.pagerank.Application;
 @SpringBootTest(classes = Application.class)
 public class RankCalcServiceTest {
 	@Autowired
-	RankCalcService rankCalcService;
+	RankService rankCalcService;
 	
 	@Test
 	public void test() {

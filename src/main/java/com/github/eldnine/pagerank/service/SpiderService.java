@@ -1,5 +1,6 @@
 package com.github.eldnine.pagerank.service;
 
+import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -7,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import com.github.eldnine.pagerank.model.Link;
@@ -19,14 +21,24 @@ public class SpiderService {
 	private static final Logger logger = LoggerFactory.getLogger(SpiderService.class);  
 	
 	public static final Integer MAX_NUM_THREADS = 10;
-	public final String START_URL = "http://sg.weibo.com";
+	
+	public int numPage;
 
 	@Autowired
 	LinkRepo linkRepo;
 	@Autowired
 	PageRepo pageRepo;
+	
+	public String getCurrentStartUrl() {
+		Iterator<Page> page = pageRepo.findAll(new PageRequest(0, 1)).iterator();
+		if (page.hasNext()) {
+			return page.next().getUrl();
+		} else {
+			return "[Start url has not been set yet]";
+		}
+	}
 
-	public synchronized void init(String startUrl) {
+	private synchronized void init(String startUrl) {
 		linkRepo.deleteAll();
 		pageRepo.deleteAll();
 		pageRepo.saveAndFlush(new Page(startUrl, false, 1.0));
@@ -60,7 +72,7 @@ public class SpiderService {
 	public void spider() {
 		ExecutorService executorService = Executors.newFixedThreadPool(MAX_NUM_THREADS);
 		for (int i = 0; i < MAX_NUM_THREADS; i++) {
-			executorService.execute(new SpiderThread(this));
+			executorService.execute(new SpiderThread(this, numPage));
 		}
 		executorService.shutdown();
 		try {
@@ -71,8 +83,9 @@ public class SpiderService {
 		logger.info("Spider has finished its job.");
 	}
 	
-	public void run() {
-		init(START_URL);
+	public void run(String startUrl, int numPage) {
+		init(startUrl);
+		this.numPage = numPage;
 		spider();
 	}
 }

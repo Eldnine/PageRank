@@ -13,20 +13,21 @@ import com.github.eldnine.pagerank.util.HtmlParser;
 
 public class SpiderThread implements Runnable{
 	private static final Logger logger = LoggerFactory.getLogger(SpiderThread.class);  
-	private final int NUM_PAGE = 10;
+	private int numPage = 10;
 
 	private final SpiderService spider;
 
-	public SpiderThread(SpiderService spider) {
+	public SpiderThread(SpiderService spider, int numPage) {
 		super();
 		this.spider = spider;
+		this.numPage = numPage;
 	}
 	
 	@Override
 	public void run() {
 		Page page;
 		int getUnCrawlPageTimes = 0;
-		for (int i = 0; i < NUM_PAGE; i++) {
+		for (int i = 0; i < numPage; i++) {
 			page = spider.getUncrawledPage();
 			// try 10 times
 			if(page == null) {

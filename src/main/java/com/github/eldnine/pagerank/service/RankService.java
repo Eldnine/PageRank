@@ -3,12 +3,14 @@ package com.github.eldnine.pagerank.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import com.github.eldnine.pagerank.model.Page;
@@ -16,8 +18,8 @@ import com.github.eldnine.pagerank.repo.LinkRepo;
 import com.github.eldnine.pagerank.repo.PageRepo;
 
 @Component
-public class RankCalcService {
-	private static final Logger logger = LoggerFactory.getLogger(RankCalcService.class);
+public class RankService {
+	private static final Logger logger = LoggerFactory.getLogger(RankService.class);
 	
 	private static final int num_iter = 10;
 	
@@ -125,6 +127,26 @@ public class RankCalcService {
 			Page page = pageRepo.findTopById(id);
 			page.setNewRank(newRank);
 			pageRepo.save(page);
+		}
+	}
+	
+	public void reset() {
+		long count = 0;
+		for (Page page : pageRepo.findAll()) {
+			page.setNewRank(1.0);
+			page.setOldRank(0.0);
+			pageRepo.save(page);
+			count++;
+		}
+		logger.info("Reset " + count + "pages.");
+	}
+	
+	public List<Page> getCurrentRankResult() {
+		Iterator<Page> page = pageRepo.findAll(new PageRequest(0, 1)).iterator();
+		if (page.hasNext()) {
+			return pageRepo.findAll();
+		} else {
+			return new ArrayList<Page>();
 		}
 	}
 }
