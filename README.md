@@ -8,6 +8,4 @@ A realization for the pagerank session of Google `http://infolab.stanford.edu/~b
 ```
 mvn spring-boot:run
 ```
-```
-visit: localhost:8080/pagerank
-```
+visit ``` localhost:8080/pagerank ```
